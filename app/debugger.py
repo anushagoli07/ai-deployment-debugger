@@ -35,7 +35,7 @@ class AIDebugger:
         Root Cause: <One sentence explanation>
         Suggested Fix: <Step by step action to fix>
         Retry Strategy: <How the system should retry this specific error>
-        Optimization Tip: <How to prevent this in the future long-term>
+        Optimization Tip: <A technical or Prompt Engineering tip to prevent this in the future>
         """
 
         try:

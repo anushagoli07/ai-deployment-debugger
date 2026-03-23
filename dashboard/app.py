@@ -29,9 +29,9 @@ if metrics:
     m3.metric("Total Cost (Est)", f"${metrics.get('total_cost_usd', 0):.4f}")
     m4.metric("Failure Rate", f"{metrics.get('failure_rate', 0)*100}%", delta_color="inverse")
 
-# --- Logs View ---
+# --- Performance Charts ---
 st.divider()
-st.subheader("📋 Request Logs & Traces")
+st.subheader("📈 Performance Trends")
 
 def load_logs():
     try:
@@ -40,6 +40,23 @@ def load_logs():
         return []
 
 logs = load_logs()
+
+if logs:
+    df = pd.DataFrame(logs)
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    
+    col_a, col_b = st.columns(2)
+    with col_a:
+        fig_lat = px.line(df, x='timestamp', y='latency_ms', title="Latency over Time (ms)", line_shape="spline", render_mode="svg")
+        fig_lat.update_layout(template="plotly_dark")
+        st.plotly_chart(fig_lat, use_container_width=True)
+    
+    with col_b:
+        # Extract total tokens from the token_usage column
+        df['total_tokens'] = df['token_usage'].apply(lambda x: x.get('total_tokens', 0))
+        fig_tokens = px.bar(df, x='timestamp', y='total_tokens', title="Token Usage per Request", color="total_tokens")
+        fig_tokens.update_layout(template="plotly_dark")
+        st.plotly_chart(fig_tokens, use_container_width=True)
 
 if logs:
     df = pd.DataFrame(logs)
