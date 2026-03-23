@@ -2,6 +2,16 @@
 
 A "Datadog for AI" monitoring system that detects failures, classifies errors, and suggests LLM-powered fixes in real-time.
 
+## 🏗️ Architecture Diagram
+```mermaid
+graph TD
+    A[RAG App / AI Service] -->|@monitor.log_trace| B[Debugger API]
+    B -->|Logs| C[JSON/SQLite DB]
+    B -->|Failures| D[LLM Debugging Engine]
+    D -->|RCA & Fixes| B
+    E[Streamlit Dashboard] -->|Metrics & Trends| B
+```
+
 ## 🚀 Key Features
 - **One-Line Decorator**: Integrate in seconds using the `@monitor.log_trace` decorator.
 - **Error Classification**: Automatically identifies `Timeout`, `Rate Limit`, `Hallucination`, and `Token Limit` errors.
